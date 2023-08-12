@@ -164,8 +164,8 @@ require (
 )
 
 replace (
-	//This replace is for backported FundCommunityPoolMsg in wasmvm
-	github.com/CosmWasm/wasmvm => github.com/classic-terra/wasmvm v1.1.1-terra.0
+	// use cosmos fork of keyring
+	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
 	// Fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	// TODO Remove it: https://github.com/cosmos/cosmos-sdk/issues/10409
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.7.0
@@ -178,3 +178,6 @@ replace (
 	// use cometbft
 	github.com/tendermint/tendermint => github.com/cometbft/cometbft v0.34.29
 )
+
+// This replace is for backported FundCommunityPoolMsg in wasmvm
+replace github.com/CosmWasm/wasmvm => github.com/classic-terra/wasmvm v1.1.1-terra.0
