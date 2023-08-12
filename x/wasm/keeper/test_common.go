@@ -363,6 +363,8 @@ func createTestInput(
 	)
 
 	router := baseapp.NewMsgServiceRouter()
+	router.SetInterfaceRegistry(encodingConfig.InterfaceRegistry)
+
 	banktypes.RegisterMsgServer(router, bankkeeper.NewMsgServerImpl(bankKeeper))
 	stakingtypes.RegisterMsgServer(router, stakingkeeper.NewMsgServerImpl(stakingKeeper))
 	distributiontypes.RegisterMsgServer(router, distributionkeeper.NewMsgServerImpl(distKeeper))
@@ -427,7 +429,7 @@ func createTestInput(
 		bankKeeper,
 		stakingKeeper,
 		govRouter,
-		baseapp.NewMsgServiceRouter(),
+		router,
 		govConfig,
 	)
 	govv1.RegisterMsgServer(router, govkeeper.NewMsgServerImpl(govKeeper))
