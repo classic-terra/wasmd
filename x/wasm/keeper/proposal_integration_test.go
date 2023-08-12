@@ -168,6 +168,7 @@ func TestInstantiateProposal_NoAdmin(t *testing.T) {
 	)
 
 	var oneAddress sdk.AccAddress = bytes.Repeat([]byte{0x1}, types.ContractAddrLen)
+	govAddress := govKeeper.GetGovernanceAccount(ctx).GetAddress().String()
 
 	// test invalid admin address
 	src := types.InstantiateContractProposalFixture(func(p *types.InstantiateContractProposal) {
@@ -176,7 +177,7 @@ func TestInstantiateProposal_NoAdmin(t *testing.T) {
 		p.Admin = "invalid"
 		p.Label = "testing"
 	})
-	msgContent, err := govv1.NewLegacyContent(src, oneAddress.String())
+	msgContent, err := govv1.NewLegacyContent(src, govAddress)
 	require.NoError(t, err)
 	_, err = govKeeper.SubmitProposal(ctx, []sdk.Msg{msgContent}, "visit cosmos vietnam")
 	require.Error(t, err)
@@ -189,7 +190,7 @@ func TestInstantiateProposal_NoAdmin(t *testing.T) {
 		p.Label = "testing"
 	})
 	em := sdk.NewEventManager()
-	msgContent, err = govv1.NewLegacyContent(src, oneAddress.String())
+	msgContent, err = govv1.NewLegacyContent(src, govAddress)
 	require.NoError(t, err)
 
 	// when stored

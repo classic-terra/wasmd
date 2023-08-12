@@ -75,7 +75,7 @@ func TestGrants(t *testing.T) {
 			filter:         types.NewAllowAllMessagesFilter(),
 			senderKey:      otherPrivKey,
 			transferAmount: myAmount,
-			expErr:         sdkerrors.ErrUnauthorized,
+			expErr:         authz.ErrNoAuthorizationFound,
 		},
 	}
 	for name, spec := range specs {
