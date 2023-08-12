@@ -2,10 +2,11 @@ package main
 
 import (
 	"errors"
-	snapshottypes "github.com/cosmos/cosmos-sdk/snapshots/types"
 	"io"
 	"os"
 	"path/filepath"
+
+	snapshottypes "github.com/cosmos/cosmos-sdk/snapshots/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
