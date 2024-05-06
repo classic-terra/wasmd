@@ -189,7 +189,7 @@ require (
 replace (
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
 	github.com/cometbft/cometbft => github.com/classic-terra/cometbft v0.37.4-classic
-	github.com/cosmos/ibc-go/v7 => github.com/classic-terra/ibc-go/v7 v7.0.0-20240419072319-aa9d74dc39ae
+	github.com/cosmos/ibc-go/v7 => github.com/classic-terra/ibc-go/v7 v7.4.0-terra
 	// dgrijalva/jwt-go is deprecated and doesn't receive security updates.
 	// See: https://github.com/cosmos/cosmos-sdk/issues/13134
 	github.com/dgrijalva/jwt-go => github.com/golang-jwt/jwt/v4 v4.4.2
