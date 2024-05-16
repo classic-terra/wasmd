@@ -188,7 +188,7 @@ require (
 
 replace (
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
-	github.com/cometbft/cometbft => github.com/classic-terra/cometbft v0.37.4-classic
+	github.com/cometbft/cometbft => github.com/classic-terra/cometbft v0.37.4-terra1
 	github.com/cosmos/cosmos-sdk => github.com/classic-terra/cosmos-sdk v0.47.10-terra
 	github.com/cosmos/ibc-go/v7 => github.com/classic-terra/ibc-go/v7 v7.4.0-terra
 	// dgrijalva/jwt-go is deprecated and doesn't receive security updates.
