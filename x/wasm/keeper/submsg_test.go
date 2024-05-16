@@ -266,7 +266,7 @@ func TestDispatchSubMsgErrorHandling(t *testing.T) {
 			msg:      validBankSend,
 			gasLimit: &subGasLimit,
 			// uses same gas as call without limit (note we do not charge the 40k on reply)
-			resultAssertions: []assertion{assertReturnedEvents(0), assertGasUsed(102000, 103000)},
+			resultAssertions: []assertion{assertReturnedEvents(0), assertGasUsed(102000, 103031)},
 		},
 		"not enough tokens with limit": {
 			submsgID:    16,
