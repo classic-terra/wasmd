@@ -149,7 +149,7 @@ func TestGenesisExportImportWithPredictableAddress(t *testing.T) {
 	eCtx, _ := ctx.CacheContext()
 	codeID := StoreReflectContract(t, eCtx, keepers).CodeID
 	creator := RandomAccountAddress(t)
-	_, _, err := keepers.ContractKeeper.Instantiate2(eCtx, codeID, creator, nil, []byte("{}"), "testing", nil, []byte("my_salt"), false)
+	_, _, err := keepers.ContractKeeper.Instantiate2(eCtx, codeID, creator, nil, []byte("{}"), nil, []byte("my_salt"), false)
 	require.NoError(t, err)
 	genesisState := ExportGenesis(eCtx, k)
 	// when imported
@@ -519,7 +519,6 @@ func TestImportContractWithCodeHistoryPreserved(t *testing.T) {
         "code_id": "1",
         "creator": "cosmos13x849jzd03vne42ynpj25hn8npjecxqrjghd8x",
         "admin": "cosmos1h5t8zxmjr30e9dqghtlpl40f2zz5cgey6esxtn",
-        "label": "ȀĴnZV芢毤",
 		"created": {
 			"block_height" : "100",
 			"tx_index" : "10"
@@ -601,7 +600,7 @@ func TestImportContractWithCodeHistoryPreserved(t *testing.T) {
 		CodeID:  firstCodeID,
 		Creator: contractCreatorAddr,
 		Admin:   adminAddr,
-		Label:   "ȀĴnZV芢毤",
+		// Label:   "ȀĴnZV芢毤",
 		Created: &types.AbsoluteTxPosition{BlockHeight: 100, TxIndex: 10},
 	}
 	assert.Equal(t, expContractInfo, *gotContractInfo)

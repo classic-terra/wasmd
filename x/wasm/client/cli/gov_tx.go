@@ -150,7 +150,7 @@ func parseVerificationFlags(gzippedWasm []byte, flags *flag.FlagSet) (string, st
 
 func ProposalInstantiateContractCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "instantiate-contract [code_id_int64] [json_encoded_init_args] --authority [address] --label [text] --title [text] --summary [text] --admin [address,optional] --amount [coins,optional]",
+		Use:   "instantiate-contract [code_id_int64] [json_encoded_init_args] --authority [address] --title [text] --summary [text] --admin [address,optional] --amount [coins,optional]",
 		Short: "Submit an instantiate wasm contract proposal",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -186,7 +186,7 @@ func ProposalInstantiateContractCmd() *cobra.Command {
 		SilenceUsage: true,
 	}
 	cmd.Flags().String(flagAmount, "", "Coins to send to the contract during instantiation")
-	cmd.Flags().String(flagLabel, "", "A human-readable name for this contract in lists")
+	// cmd.Flags().String(flagLabel, "", "A human-readable name for this contract in lists")
 	cmd.Flags().String(flagAdmin, "", "Address or key name of an admin")
 	cmd.Flags().Bool(flagNoAdmin, false, "You must set this explicitly if you don't want an admin")
 
@@ -234,7 +234,7 @@ func ProposalInstantiateContract2Cmd() *cobra.Command {
 	}
 
 	cmd.Flags().String(flagAmount, "", "Coins to send to the contract during instantiation")
-	cmd.Flags().String(flagLabel, "", "A human-readable name for this contract in lists")
+	// cmd.Flags().String(flagLabel, "", "A human-readable name for this contract in lists")
 	cmd.Flags().String(flagAdmin, "", "Address of an admin")
 	cmd.Flags().Bool(flagNoAdmin, false, "You must set this explicitly if you don't want an admin")
 
@@ -245,7 +245,7 @@ func ProposalInstantiateContract2Cmd() *cobra.Command {
 
 func ProposalStoreAndInstantiateContractCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "store-instantiate [wasm file] [json_encoded_init_args] --authority [address] --label [text] --title [text] --summary [text]" +
+		Use: "store-instantiate [wasm file] [json_encoded_init_args] --authority [address] --title [text] --summary [text]" +
 			"--unpin-code [unpin_code,optional] --source [source,optional] --builder [builder,optional] --code-hash [code_hash,optional] --admin [address,optional] --amount [coins,optional]",
 		Short: "Submit a store and instantiate wasm contract proposal",
 		Args:  cobra.ExactArgs(2),
@@ -287,13 +287,13 @@ func ProposalStoreAndInstantiateContractCmd() *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("amount: %s", err)
 			}
-			label, err := cmd.Flags().GetString(flagLabel)
-			if err != nil {
-				return fmt.Errorf("label: %s", err)
-			}
-			if label == "" {
-				return errors.New("label is required on all contracts")
-			}
+			// label, err := cmd.Flags().GetString(flagLabel)
+			// if err != nil {
+			// 	return fmt.Errorf("label: %s", err)
+			// }
+			// if label == "" {
+			// 	return errors.New("label is required on all contracts")
+			// }
 			adminStr, err := cmd.Flags().GetString(flagAdmin)
 			if err != nil {
 				return fmt.Errorf("admin: %s", err)
@@ -337,9 +337,9 @@ func ProposalStoreAndInstantiateContractCmd() *cobra.Command {
 				Builder:               builder,
 				CodeHash:              codeHash,
 				Admin:                 adminStr,
-				Label:                 label,
-				Msg:                   []byte(args[1]),
-				Funds:                 amount,
+				// Label:                 label,
+				Msg:   []byte(args[1]),
+				Funds: amount,
 			}
 
 			proposalMsg, err := v1.NewMsgSubmitProposal([]sdk.Msg{&msg}, deposit, clientCtx.GetFromAddress().String(), "", proposalTitle, summary)
@@ -360,7 +360,7 @@ func ProposalStoreAndInstantiateContractCmd() *cobra.Command {
 	cmd.Flags().String(flagBuilder, "", "Builder is a valid docker image name with tag, such as \"cosmwasm/workspace-optimizer:0.12.9\"")
 	cmd.Flags().BytesHex(flagCodeHash, nil, "CodeHash is the sha256 hash of the wasm code")
 	cmd.Flags().String(flagAmount, "", "Coins to send to the contract during instantiation")
-	cmd.Flags().String(flagLabel, "", "A human-readable name for this contract in lists")
+	// cmd.Flags().String(flagLabel, "", "A human-readable name for this contract in lists")
 	cmd.Flags().String(flagAdmin, "", "Address or key name of an admin")
 	cmd.Flags().Bool(flagNoAdmin, false, "You must set this explicitly if you don't want an admin")
 	addInstantiatePermissionFlags(cmd)

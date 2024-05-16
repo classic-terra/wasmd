@@ -206,7 +206,7 @@ func TestHandleInstantiate(t *testing.T) {
 		CodeID: firstCodeID,
 		Msg:    initMsgBz,
 		Funds:  nil,
-		Label:  "testing",
+		// Label:  "testing",
 	}
 	h = data.msgServiceRouter.Handler(initMsg)
 	res, err = h(data.ctx, initMsg)
@@ -264,7 +264,7 @@ func TestHandleExecute(t *testing.T) {
 		CodeID: firstCodeID,
 		Msg:    initMsgBz,
 		Funds:  deposit,
-		Label:  "testing",
+		// Label:  "testing",
 	}
 	h = data.msgServiceRouter.Handler(initCmd)
 	res, err = h(data.ctx, initCmd)
@@ -397,7 +397,7 @@ func TestHandleExecuteEscrow(t *testing.T) {
 		CodeID: firstCodeID,
 		Msg:    initMsgBz,
 		Funds:  deposit,
-		Label:  "testing",
+		// Label:  "testing",
 	}
 	h = data.msgServiceRouter.Handler(&initCmd)
 	res, err := h(data.ctx, &initCmd)

@@ -70,21 +70,21 @@ func TestGasCostOnQuery(t *testing.T) {
 		"no recursion, no work": {
 			gasLimit:    400_000,
 			msg:         Recurse{},
-			expectedGas: GasNoWork,
+			expectedGas: GasNoWork - 72,
 		},
 		"no recursion, some work": {
 			gasLimit: 400_000,
 			msg: Recurse{
 				Work: 50, // 50 rounds of sha256 inside the contract
 			},
-			expectedGas: GasWork50,
+			expectedGas: GasWork50 - 72,
 		},
 		"recursion 1, no work": {
 			gasLimit: 400_000,
 			msg: Recurse{
 				Depth: 1,
 			},
-			expectedGas: 2*GasNoWork + GasReturnUnhashed,
+			expectedGas: 2*GasNoWork + GasReturnUnhashed - 144,
 		},
 		"recursion 1, some work": {
 			gasLimit: 400_000,
@@ -92,7 +92,7 @@ func TestGasCostOnQuery(t *testing.T) {
 				Depth: 1,
 				Work:  50,
 			},
-			expectedGas: 2*GasWork50 + GasReturnHashed,
+			expectedGas: 2*GasWork50 + GasReturnHashed - 144,
 		},
 		"recursion 4, some work": {
 			gasLimit: 400_000,
@@ -100,7 +100,7 @@ func TestGasCostOnQuery(t *testing.T) {
 				Depth: 4,
 				Work:  50,
 			},
-			expectedGas: 5*GasWork50 + 4*GasReturnHashed,
+			expectedGas: 5*GasWork50 + 4*GasReturnHashed - 360,
 		},
 	}
 
@@ -229,7 +229,7 @@ func TestLimitRecursiveQueryGas(t *testing.T) {
 				Work:  2000,
 			},
 			expectQueriesFromContract: 0,
-			expectedGas:               GasWork2k,
+			expectedGas:               GasWork2k - 72,
 		},
 		"recursion 5, lots of work": {
 			gasLimit: 4_000_000,
@@ -239,7 +239,7 @@ func TestLimitRecursiveQueryGas(t *testing.T) {
 			},
 			expectQueriesFromContract: 5,
 			// FIXME: why -1 ... confused a bit by calculations, seems like rounding issues
-			expectedGas: GasWork2k + 5*(GasWork2k+GasReturnHashed),
+			expectedGas: GasWork2k + 5*(GasWork2k+GasReturnHashed) - 432,
 		},
 		// this is where we expect an error...
 		// it has enough gas to run 5 times and die on the 6th (5th time dispatching to sub-contract)
@@ -262,7 +262,7 @@ func TestLimitRecursiveQueryGas(t *testing.T) {
 			expectQueriesFromContract: 10,
 			expectOutOfGas:            false,
 			expectError:               "query wasm contract failed", // Error we get from the contract instance doing the failing query, not wasmd
-			expectedGas:               10*(GasWork2k+GasReturnHashed) - 249,
+			expectedGas:               10*(GasWork2k+GasReturnHashed) - 969,
 		},
 	}
 

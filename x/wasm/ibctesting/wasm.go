@@ -70,9 +70,9 @@ func (chain *TestChain) InstantiateContract(codeID uint64, initMsg []byte) sdk.A
 		Sender: chain.SenderAccount.GetAddress().String(),
 		Admin:  chain.SenderAccount.GetAddress().String(),
 		CodeID: codeID,
-		Label:  "ibc-test",
-		Msg:    initMsg,
-		Funds:  sdk.Coins{ibctesting.TestCoin},
+		// Label:  "ibc-test",
+		Msg:   initMsg,
+		Funds: sdk.Coins{ibctesting.TestCoin},
 	}
 
 	r, err := chain.SendMsgs(instantiateMsg)

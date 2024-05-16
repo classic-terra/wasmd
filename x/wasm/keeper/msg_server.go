@@ -66,7 +66,7 @@ func (m msgServer) InstantiateContract(goCtx context.Context, msg *types.MsgInst
 
 	policy := m.selectAuthorizationPolicy(ctx, msg.Sender)
 
-	contractAddr, data, err := m.keeper.instantiate(ctx, msg.CodeID, senderAddr, adminAddr, msg.Msg, msg.Label, msg.Funds, m.keeper.ClassicAddressGenerator(), policy)
+	contractAddr, data, err := m.keeper.instantiate(ctx, msg.CodeID, senderAddr, adminAddr, msg.Msg, msg.Funds, m.keeper.ClassicAddressGenerator(), policy)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func (m msgServer) InstantiateContract2(goCtx context.Context, msg *types.MsgIns
 
 	addrGenerator := PredicableAddressGenerator(senderAddr, msg.Salt, msg.Msg, msg.FixMsg)
 
-	contractAddr, data, err := m.keeper.instantiate(ctx, msg.CodeID, senderAddr, adminAddr, msg.Msg, msg.Label, msg.Funds, addrGenerator, policy)
+	contractAddr, data, err := m.keeper.instantiate(ctx, msg.CodeID, senderAddr, adminAddr, msg.Msg, msg.Funds, addrGenerator, policy)
 	if err != nil {
 		return nil, err
 	}
@@ -343,7 +343,7 @@ func (m msgServer) StoreAndInstantiateContract(goCtx context.Context, req *types
 		return nil, err
 	}
 
-	contractAddr, data, err := m.keeper.instantiate(ctx, codeID, authorityAddr, adminAddr, req.Msg, req.Label, req.Funds, m.keeper.ClassicAddressGenerator(), policy)
+	contractAddr, data, err := m.keeper.instantiate(ctx, codeID, authorityAddr, adminAddr, req.Msg, req.Funds, m.keeper.ClassicAddressGenerator(), policy)
 	if err != nil {
 		return nil, err
 	}

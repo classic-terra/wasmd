@@ -3,7 +3,7 @@ package types
 import (
 	"bytes"
 	"context"
-	"strings"
+	// "strings"
 	"testing"
 	"time"
 
@@ -44,14 +44,14 @@ func TestContractInfoValidateBasic(t *testing.T) {
 			srcMutator: func(c *ContractInfo) { c.Admin = invalidAddress },
 			expError:   true,
 		},
-		"label empty": {
-			srcMutator: func(c *ContractInfo) { c.Label = "" },
-			expError:   true,
-		},
-		"label exceeds limit": {
-			srcMutator: func(c *ContractInfo) { c.Label = strings.Repeat("a", MaxLabelSize+1) },
-			expError:   true,
-		},
+		// "label empty": {
+		// 	srcMutator: func(c *ContractInfo) { c.Label = "" },
+		// 	expError:   true,
+		// },
+		// "label exceeds limit": {
+		// 	srcMutator: func(c *ContractInfo) { c.Label = strings.Repeat("a", MaxLabelSize+1) },
+		// 	expError:   true,
+		// },
 		// "invalid extension": {
 		// 	srcMutator: func(c *ContractInfo) {
 		// 		// any protobuf type with ValidateBasic method
@@ -184,7 +184,7 @@ func TestContractInfoMarshalUnmarshal(t *testing.T) {
 	require.NoError(t, err)
 	myExtension.TotalDeposit = nil
 
-	src := NewContractInfo(1, myAddr, myOtherAddr, "bar", &anyPos)
+	src := NewContractInfo(1, myAddr, myOtherAddr, &anyPos)
 	require.NoError(t, err)
 
 	interfaceRegistry := codectypes.NewInterfaceRegistry()

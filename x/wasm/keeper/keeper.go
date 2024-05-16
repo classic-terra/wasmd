@@ -241,7 +241,7 @@ func (k Keeper) instantiate(
 	codeID uint64,
 	creator, admin sdk.AccAddress,
 	initMsg []byte,
-	label string,
+	// label string,
 	deposit sdk.Coins,
 	addressGenerator AddressGenerator,
 	authPolicy types.AuthorizationPolicy,
@@ -327,7 +327,7 @@ func (k Keeper) instantiate(
 
 	// persist instance first
 	createdAt := types.NewAbsoluteTxPosition(ctx)
-	contractInfo := types.NewContractInfo(codeID, creator, admin, label, createdAt)
+	contractInfo := types.NewContractInfo(codeID, creator, admin, createdAt)
 
 	// check for IBC flag
 	report, err := k.wasmVM.AnalyzeCode(codeInfo.CodeHash)
@@ -638,7 +638,7 @@ func (k Keeper) setContractLabel(ctx sdk.Context, contractAddress, caller sdk.Ac
 	if !authZ.CanModifyContract(contractInfo.AdminAddr(), caller) {
 		return errorsmod.Wrap(sdkerrors.ErrUnauthorized, "can not modify contract")
 	}
-	contractInfo.Label = newLabel
+	// contractInfo.Label = newLabel
 	k.storeContractInfo(ctx, contractAddress, contractInfo)
 	ctx.EventManager().EmitEvent(sdk.NewEvent(
 		types.EventTypeUpdateContractLabel,

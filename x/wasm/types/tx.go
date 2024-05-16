@@ -103,9 +103,9 @@ func (msg MsgInstantiateContract) ValidateBasic() error {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "code id is required")
 	}
 
-	if err := ValidateLabel(msg.Label); err != nil {
-		return errorsmod.Wrap(err, "label")
-	}
+	// if err := ValidateLabel(msg.Label); err != nil {
+	// 	return errorsmod.Wrap(err, "label")
+	// }
 
 	if !msg.Funds.IsValid() {
 		return sdkerrors.ErrInvalidCoins
@@ -364,9 +364,9 @@ func (msg MsgInstantiateContract2) ValidateBasic() error {
 		return errorsmod.Wrap(sdkerrors.ErrInvalidRequest, "code id is required")
 	}
 
-	if err := ValidateLabel(msg.Label); err != nil {
-		return errorsmod.Wrap(err, "label")
-	}
+	// if err := ValidateLabel(msg.Label); err != nil {
+	// 	return errorsmod.Wrap(err, "label")
+	// }
 
 	if !msg.Funds.IsValid() {
 		return sdkerrors.ErrInvalidCoins

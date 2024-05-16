@@ -57,7 +57,7 @@ func TestReflectContractSend(t *testing.T) {
 
 	// creator instantiates a contract and gives it tokens
 	reflectStart := sdk.NewCoins(sdk.NewInt64Coin("denom", 40000))
-	reflectAddr, _, err := keeper.Instantiate(ctx, reflectID, creator, nil, []byte("{}"), "reflect contract 2", reflectStart)
+	reflectAddr, _, err := keeper.Instantiate(ctx, reflectID, creator, nil, []byte("{}"), reflectStart)
 	require.NoError(t, err)
 	require.NotEmpty(t, reflectAddr)
 
@@ -69,7 +69,7 @@ func TestReflectContractSend(t *testing.T) {
 	initMsgBz, err := json.Marshal(initMsg)
 	require.NoError(t, err)
 	escrowStart := sdk.NewCoins(sdk.NewInt64Coin("denom", 25000))
-	escrowAddr, _, err := keeper.Instantiate(ctx, escrowID, creator, nil, initMsgBz, "escrow contract 2", escrowStart)
+	escrowAddr, _, err := keeper.Instantiate(ctx, escrowID, creator, nil, initMsgBz, escrowStart)
 	require.NoError(t, err)
 	require.NotEmpty(t, escrowAddr)
 
@@ -130,7 +130,7 @@ func TestReflectCustomMsg(t *testing.T) {
 
 	// creator instantiates a contract and gives it tokens
 	contractStart := sdk.NewCoins(sdk.NewInt64Coin("denom", 40000))
-	contractAddr, _, err := keeper.Instantiate(ctx, codeID, creator, nil, []byte("{}"), "reflect contract 1", contractStart)
+	contractAddr, _, err := keeper.Instantiate(ctx, codeID, creator, nil, []byte("{}"), contractStart)
 	require.NoError(t, err)
 	require.NotEmpty(t, contractAddr)
 
@@ -215,7 +215,7 @@ func TestRustPanicIsHandled(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, uint64(1), codeID)
 
-	contractAddr, _, err := keeper.Instantiate(ctx, codeID, creator, nil, []byte("{}"), "cyberpunk contract", nil)
+	contractAddr, _, err := keeper.Instantiate(ctx, codeID, creator, nil, []byte("{}"), nil)
 	require.NoError(t, err)
 	require.NotEmpty(t, contractAddr)
 

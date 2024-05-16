@@ -211,8 +211,8 @@ func InitializeWasmApp(tb testing.TB, db dbm.DB, numAccounts int) AppInfo {
 		Sender: addr.String(),
 		Admin:  addr.String(),
 		CodeID: codeID,
-		Label:  "Demo contract",
-		Msg:    initBz,
+		// Label:  "Demo contract",
+		Msg: initBz,
 	}
 	gasWanted := 500000 + 10000*uint64(numAccounts)
 	initTx, err := simtestutil.GenSignedMockTx(r, txGen, []sdk.Msg{&initMsg}, nil, gasWanted, "", []uint64{0}, []uint64{1}, minter)

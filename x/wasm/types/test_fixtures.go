@@ -113,7 +113,7 @@ func ContractInfoFixture(mutators ...func(*ContractInfo)) ContractInfo {
 	fixture := ContractInfo{
 		CodeID:  1,
 		Creator: anyAddress,
-		Label:   "any",
+		// Label:   "any",
 		Created: &AbsoluteTxPosition{BlockHeight: 1, TxIndex: 1},
 	}
 
@@ -167,8 +167,8 @@ func MsgInstantiateContractFixture(mutators ...func(*MsgInstantiateContract)) *M
 		Sender: anyAddress,
 		Admin:  anyAddress,
 		CodeID: 1,
-		Label:  "testing",
-		Msg:    []byte(`{"foo":"bar"}`),
+		// Label:  "testing",
+		Msg: []byte(`{"foo":"bar"}`),
 		Funds: sdk.Coins{{
 			Denom:  "stake",
 			Amount: sdk.NewInt(1),

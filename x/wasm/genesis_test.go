@@ -47,7 +47,7 @@ func TestInitGenesis(t *testing.T) {
 		CodeID: firstCodeID,
 		Msg:    initMsgBz,
 		Funds:  deposit,
-		Label:  "testing",
+		// Label:  "testing",
 	}
 	h = data.msgServiceRouter.Handler(&instMsg)
 	res, err = h(data.ctx, &instMsg)

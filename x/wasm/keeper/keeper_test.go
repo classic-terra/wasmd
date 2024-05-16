@@ -412,13 +412,13 @@ func TestInstantiate(t *testing.T) {
 
 	em := sdk.NewEventManager()
 	// create with no balance is also legal
-	gotContractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx.WithEventManager(em), example.CodeID, creator, nil, initMsgBz, "demo contract 1", nil)
+	gotContractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx.WithEventManager(em), example.CodeID, creator, nil, initMsgBz, nil)
 	require.NoError(t, err)
 	require.Equal(t, "cosmos14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s4hmalr", gotContractAddr.String())
 
 	gasAfter := ctx.GasMeter().GasConsumed()
 	if types.EnableGasVerification {
-		require.Equal(t, uint64(0x1b3ef), gasAfter-gasBefore)
+		require.Equal(t, uint64(0x1b1f1), gasAfter-gasBefore)
 	}
 
 	// ensure it is stored properly
@@ -426,7 +426,7 @@ func TestInstantiate(t *testing.T) {
 	require.NotNil(t, info)
 	assert.Equal(t, creator.String(), info.Creator)
 	assert.Equal(t, example.CodeID, info.CodeID)
-	assert.Equal(t, "demo contract 1", info.Label)
+	// assert.Equal(t, "demo contract 1", info.Label)
 
 	exp := []types.ContractCodeHistoryEntry{{
 		// Operation: types.ContractCodeHistoryOperationTypeInit,
@@ -486,7 +486,7 @@ func TestInstantiateWithDeposit(t *testing.T) {
 			require.NoError(t, err)
 
 			// when
-			addr, _, err := keepers.ContractKeeper.Instantiate(ctx, contractID, spec.srcActor, nil, initMsg, "my label", deposit)
+			addr, _, err := keepers.ContractKeeper.Instantiate(ctx, contractID, spec.srcActor, nil, initMsg, deposit)
 			// then
 			if spec.expError {
 				require.Error(t, err)
@@ -551,7 +551,7 @@ func TestInstantiateWithPermissions(t *testing.T) {
 			contractID, _, err := keeper.Create(ctx, myAddr, hackatomWasm, &spec.srcPermission) //nolint:gosec
 			require.NoError(t, err)
 
-			_, _, err = keepers.ContractKeeper.Instantiate(ctx, contractID, spec.srcActor, nil, initMsgBz, "demo contract 1", nil)
+			_, _, err = keepers.ContractKeeper.Instantiate(ctx, contractID, spec.srcActor, nil, initMsgBz, nil)
 			assert.True(t, spec.expError.Is(err), "got %+v", err)
 		})
 	}
@@ -565,7 +565,6 @@ func TestInstantiateWithAccounts(t *testing.T) {
 
 	senderAddr := DeterministicAccountAddress(t, 1)
 	keepers.Faucet.Fund(parentCtx, senderAddr, sdk.NewInt64Coin("denom", 100000000))
-	myTestLabel := "testing"
 	mySalt := []byte(`my salt`)
 	contractAddr := BuildContractAddressPredictable(example.Checksum, senderAddr, mySalt, []byte{})
 
@@ -676,7 +675,7 @@ func TestInstantiateWithAccounts(t *testing.T) {
 				}
 			}()
 			// when
-			gotAddr, _, gotErr := keepers.ContractKeeper.Instantiate2(ctx, 1, senderAddr, nil, initMsg, myTestLabel, spec.deposit, mySalt, false)
+			gotAddr, _, gotErr := keepers.ContractKeeper.Instantiate2(ctx, 1, senderAddr, nil, initMsg, spec.deposit, mySalt, false)
 			if spec.expErr != nil {
 				assert.ErrorIs(t, gotErr, spec.expErr)
 				return
@@ -704,7 +703,7 @@ func TestInstantiateWithNonExistingCodeID(t *testing.T) {
 	require.NoError(t, err)
 
 	const nonExistingCodeID = 9999
-	addr, _, err := keepers.ContractKeeper.Instantiate(ctx, nonExistingCodeID, creator, nil, initMsgBz, "demo contract 2", nil)
+	addr, _, err := keepers.ContractKeeper.Instantiate(ctx, nonExistingCodeID, creator, nil, initMsgBz, nil)
 	require.Equal(t, types.ErrNoSuchCodeFn(nonExistingCodeID).Wrapf("code id %d", nonExistingCodeID).Error(), err.Error())
 	require.Nil(t, addr)
 }
@@ -721,7 +720,7 @@ func TestInstantiateWithContractDataResponse(t *testing.T) {
 	}
 
 	example := StoreRandomContract(t, ctx, keepers, wasmEngineMock)
-	_, data, err := keepers.ContractKeeper.Instantiate(ctx, example.CodeID, example.CreatorAddr, nil, nil, "test", nil)
+	_, data, err := keepers.ContractKeeper.Instantiate(ctx, example.CodeID, example.CreatorAddr, nil, nil, nil)
 	require.NoError(t, err)
 	assert.Equal(t, []byte("my-response-data"), data)
 }
@@ -792,7 +791,7 @@ func TestInstantiateWithContractFactoryChildQueriesParent(t *testing.T) {
 	}
 
 	// when
-	parentAddr, data, err := keepers.ContractKeeper.Instantiate(ctx, example.CodeID, example.CreatorAddr, nil, nil, "test", nil)
+	parentAddr, data, err := keepers.ContractKeeper.Instantiate(ctx, example.CodeID, example.CreatorAddr, nil, nil, nil)
 
 	// then
 	require.NoError(t, err)
@@ -823,7 +822,7 @@ func TestExecute(t *testing.T) {
 	initMsgBz, err := json.Marshal(initMsg)
 	require.NoError(t, err)
 
-	addr, _, err := keepers.ContractKeeper.Instantiate(ctx, contractID, creator, nil, initMsgBz, "demo contract 3", deposit)
+	addr, _, err := keepers.ContractKeeper.Instantiate(ctx, contractID, creator, nil, initMsgBz, deposit)
 	require.NoError(t, err)
 	require.Equal(t, "cosmos14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s4hmalr", addr.String())
 
@@ -862,7 +861,7 @@ func TestExecute(t *testing.T) {
 	// make sure gas is properly deducted from ctx
 	gasAfter := ctx.GasMeter().GasConsumed()
 	if types.EnableGasVerification {
-		require.Equal(t, uint64(0x1a15b), gasAfter-gasBefore)
+		require.Equal(t, uint64(0x1a128), gasAfter-gasBefore)
 	}
 	// ensure bob now exists and got both payments released
 	bobAcct = accKeeper.GetAccount(ctx, bob)
@@ -957,7 +956,7 @@ func TestExecuteWithDeposit(t *testing.T) {
 			initMsgBz, err := json.Marshal(initMsg)
 			require.NoError(t, err)
 
-			contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, codeID, spec.srcActor, nil, initMsgBz, "my label", nil)
+			contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, codeID, spec.srcActor, nil, initMsgBz, nil)
 			require.NoError(t, err)
 
 			// when
@@ -1010,7 +1009,7 @@ func TestExecuteWithPanic(t *testing.T) {
 	initMsgBz, err := json.Marshal(initMsg)
 	require.NoError(t, err)
 
-	addr, _, err := keepers.ContractKeeper.Instantiate(ctx, contractID, creator, nil, initMsgBz, "demo contract 4", deposit)
+	addr, _, err := keepers.ContractKeeper.Instantiate(ctx, contractID, creator, nil, initMsgBz, deposit)
 	require.NoError(t, err)
 
 	// let's make sure we get a reasonable error, no panic/crash
@@ -1042,7 +1041,7 @@ func TestExecuteWithCpuLoop(t *testing.T) {
 	initMsgBz, err := json.Marshal(initMsg)
 	require.NoError(t, err)
 
-	addr, _, err := keepers.ContractKeeper.Instantiate(ctx, contractID, creator, nil, initMsgBz, "demo contract 5", deposit)
+	addr, _, err := keepers.ContractKeeper.Instantiate(ctx, contractID, creator, nil, initMsgBz, deposit)
 	require.NoError(t, err)
 
 	// make sure we set a limit before calling
@@ -1085,7 +1084,7 @@ func TestExecuteWithStorageLoop(t *testing.T) {
 	initMsgBz, err := json.Marshal(initMsg)
 	require.NoError(t, err)
 
-	addr, _, err := keepers.ContractKeeper.Instantiate(ctx, contractID, creator, nil, initMsgBz, "demo contract 6", deposit)
+	addr, _, err := keepers.ContractKeeper.Instantiate(ctx, contractID, creator, nil, initMsgBz, deposit)
 	require.NoError(t, err)
 
 	// make sure we set a limit before calling
@@ -1264,7 +1263,7 @@ func TestMigrate(t *testing.T) {
 			ctx, _ := parentCtx.WithBlockHeight(blockHeight + 1).CacheContext()
 			blockHeight++
 
-			contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, spec.fromCodeID, creator, spec.admin, spec.initMsg, "demo contract", nil)
+			contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, spec.fromCodeID, creator, spec.admin, spec.initMsg, nil)
 			require.NoError(t, err)
 			if spec.overrideContractAddr != nil {
 				contractAddr = spec.overrideContractAddr
@@ -1365,7 +1364,7 @@ func TestMigrateWithDispatchedMessage(t *testing.T) {
 	initMsgBz := initMsg.GetBytes(t)
 
 	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 1)
-	contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, originalContractID, creator, fred, initMsgBz, "demo contract", deposit)
+	contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, originalContractID, creator, fred, initMsgBz, deposit)
 	require.NoError(t, err)
 
 	migMsgBz := BurnerExampleInitMsg{Payout: myPayoutAddr, Delete: 100}.GetBytes(t)
@@ -1436,7 +1435,7 @@ func TestIterateContractsByCode(t *testing.T) {
 		Verifier:    RandomAccountAddress(t),
 		Beneficiary: RandomAccountAddress(t),
 	}.GetBytes(t)
-	contractAddr3, _, err := c.Instantiate(ctx, example1.CodeID, example1.CreatorAddr, nil, initMsg, "foo", nil)
+	contractAddr3, _, err := c.Instantiate(ctx, example1.CodeID, example1.CreatorAddr, nil, initMsg, nil)
 	require.NoError(t, err)
 	specs := map[string]struct {
 		codeID uint64
@@ -1529,7 +1528,7 @@ func TestSudo(t *testing.T) {
 	}
 	initMsgBz, err := json.Marshal(initMsg)
 	require.NoError(t, err)
-	addr, _, err := keepers.ContractKeeper.Instantiate(ctx, contractID, creator, nil, initMsgBz, "demo contract 3", deposit)
+	addr, _, err := keepers.ContractKeeper.Instantiate(ctx, contractID, creator, nil, initMsgBz, deposit)
 	require.NoError(t, err)
 	require.Equal(t, "cosmos14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s4hmalr", addr.String())
 
@@ -1648,7 +1647,7 @@ func TestUpdateContractAdmin(t *testing.T) {
 	for msg, spec := range specs {
 		t.Run(msg, func(t *testing.T) {
 			ctx, _ := parentCtx.CacheContext()
-			addr, _, err := keepers.ContractKeeper.Instantiate(ctx, originalContractID, creator, spec.instAdmin, initMsgBz, "demo contract", nil)
+			addr, _, err := keepers.ContractKeeper.Instantiate(ctx, originalContractID, creator, spec.instAdmin, initMsgBz, nil)
 			require.NoError(t, err)
 			if spec.overrideContractAddr != nil {
 				addr = spec.overrideContractAddr
@@ -1713,7 +1712,7 @@ func TestClearContractAdmin(t *testing.T) {
 	for msg, spec := range specs {
 		t.Run(msg, func(t *testing.T) {
 			ctx, _ := parentCtx.CacheContext()
-			addr, _, err := keepers.ContractKeeper.Instantiate(ctx, originalContractID, creator, spec.instAdmin, initMsgBz, "demo contract", nil)
+			addr, _, err := keepers.ContractKeeper.Instantiate(ctx, originalContractID, creator, spec.instAdmin, initMsgBz, nil)
 			require.NoError(t, err)
 			if spec.overrideContractAddr != nil {
 				addr = spec.overrideContractAddr
@@ -2320,15 +2319,15 @@ func TestIteratorContractByCreator(t *testing.T) {
 
 	depositContract := sdk.NewCoins(sdk.NewCoin("denom", sdk.NewInt(1_000)))
 
-	gotAddr1, _, _ := keepers.ContractKeeper.Instantiate(parentCtx, contract1ID, mockAddress1, nil, initMsgBz, "label", depositContract)
+	gotAddr1, _, _ := keepers.ContractKeeper.Instantiate(parentCtx, contract1ID, mockAddress1, nil, initMsgBz, depositContract)
 	ctx := parentCtx.WithBlockHeight(parentCtx.BlockHeight() + 1)
-	gotAddr2, _, _ := keepers.ContractKeeper.Instantiate(ctx, contract1ID, mockAddress2, nil, initMsgBz, "label", depositContract)
+	gotAddr2, _, _ := keepers.ContractKeeper.Instantiate(ctx, contract1ID, mockAddress2, nil, initMsgBz, depositContract)
 	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 1)
-	gotAddr3, _, _ := keepers.ContractKeeper.Instantiate(ctx, contract1ID, gotAddr1, nil, initMsgBz, "label", depositContract)
+	gotAddr3, _, _ := keepers.ContractKeeper.Instantiate(ctx, contract1ID, gotAddr1, nil, initMsgBz, depositContract)
 	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 1)
-	gotAddr4, _, _ := keepers.ContractKeeper.Instantiate(ctx, contract2ID, mockAddress2, nil, initMsgBz, "label", depositContract)
+	gotAddr4, _, _ := keepers.ContractKeeper.Instantiate(ctx, contract2ID, mockAddress2, nil, initMsgBz, depositContract)
 	ctx = ctx.WithBlockHeight(ctx.BlockHeight() + 1)
-	gotAddr5, _, _ := keepers.ContractKeeper.Instantiate(ctx, contract2ID, mockAddress2, nil, initMsgBz, "label", depositContract)
+	gotAddr5, _, _ := keepers.ContractKeeper.Instantiate(ctx, contract2ID, mockAddress2, nil, initMsgBz, depositContract)
 
 	specs := map[string]struct {
 		creatorAddr   sdk.AccAddress
@@ -2538,7 +2537,7 @@ func TestSetContractLabel(t *testing.T) {
 				return
 			}
 			require.NoError(t, gotErr)
-			assert.Equal(t, spec.newLabel, k.GetContractInfo(ctx, spec.contract).Label)
+			// assert.Equal(t, spec.newLabel, k.GetContractInfo(ctx, spec.contract).Label)
 			// and event emitted
 			require.Len(t, em.Events(), 1)
 			assert.Equal(t, "update_contract_label", em.Events()[0].Type)

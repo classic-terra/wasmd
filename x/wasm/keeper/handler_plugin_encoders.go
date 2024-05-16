@@ -244,10 +244,10 @@ func EncodeWasmMsg(sender sdk.AccAddress, msg *wasmvmtypes.WasmMsg) ([]sdk.Msg, 
 		sdkMsg := types.MsgInstantiateContract{
 			Sender: sender.String(),
 			CodeID: msg.Instantiate.CodeID,
-			Label:  msg.Instantiate.Label,
-			Msg:    msg.Instantiate.Msg,
-			Admin:  msg.Instantiate.Admin,
-			Funds:  coins,
+			// Label:  msg.Instantiate.Label,
+			Msg:   msg.Instantiate.Msg,
+			Admin: msg.Instantiate.Admin,
+			Funds: coins,
 		}
 		return []sdk.Msg{&sdkMsg}, nil
 	case msg.Instantiate2 != nil:
@@ -260,10 +260,10 @@ func EncodeWasmMsg(sender sdk.AccAddress, msg *wasmvmtypes.WasmMsg) ([]sdk.Msg, 
 			Sender: sender.String(),
 			Admin:  msg.Instantiate2.Admin,
 			CodeID: msg.Instantiate2.CodeID,
-			Label:  msg.Instantiate2.Label,
-			Msg:    msg.Instantiate2.Msg,
-			Funds:  coins,
-			Salt:   msg.Instantiate2.Salt,
+			// Label:  msg.Instantiate2.Label,
+			Msg:   msg.Instantiate2.Msg,
+			Funds: coins,
+			Salt:  msg.Instantiate2.Salt,
 			// FixMsg is discouraged, see: https://medium.com/cosmwasm/dev-note-3-limitations-of-instantiate2-and-how-to-deal-with-them-a3f946874230
 			FixMsg: false,
 		}

@@ -39,7 +39,7 @@ func TestMaskReflectCustomQuery(t *testing.T) {
 
 	// creator instantiates a contract and gives it tokens
 	contractStart := sdk.NewCoins(sdk.NewInt64Coin("denom", 40000))
-	contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, codeID, creator, nil, []byte("{}"), "reflect contract 1", contractStart)
+	contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, codeID, creator, nil, []byte("{}"), contractStart)
 	require.NoError(t, err)
 	require.NotEmpty(t, contractAddr)
 
@@ -88,7 +88,7 @@ func TestReflectStargateQuery(t *testing.T) {
 	require.Equal(t, uint64(1), codeID)
 
 	// creator instantiates a contract and gives it tokens
-	contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, codeID, creator, nil, []byte("{}"), "reflect contract 1", contractStart)
+	contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, codeID, creator, nil, []byte("{}"), contractStart)
 	require.NoError(t, err)
 	require.NotEmpty(t, contractAddr)
 
@@ -123,7 +123,7 @@ func TestReflectTotalSupplyQuery(t *testing.T) {
 	codeID := StoreReflectContract(t, ctx, keepers).CodeID
 	// creator instantiates a contract and gives it tokens
 	creator := RandomAccountAddress(t)
-	contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, codeID, creator, nil, []byte("{}"), "testing", nil)
+	contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, codeID, creator, nil, []byte("{}"), nil)
 	require.NoError(t, err)
 
 	currentStakeSupply := keepers.BankKeeper.GetSupply(ctx, "stake")
@@ -181,7 +181,7 @@ func TestReflectInvalidStargateQuery(t *testing.T) {
 	require.Equal(t, uint64(1), codeID)
 
 	// creator instantiates a contract and gives it tokens
-	contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, codeID, creator, nil, []byte("{}"), "reflect contract 1", contractStart)
+	contractAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, codeID, creator, nil, []byte("{}"), contractStart)
 	require.NoError(t, err)
 	require.NotEmpty(t, contractAddr)
 
@@ -262,7 +262,7 @@ func TestMaskReflectWasmQueries(t *testing.T) {
 
 	// creator instantiates a contract and gives it tokens
 	reflectStart := sdk.NewCoins(sdk.NewInt64Coin("denom", 40000))
-	reflectAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, reflectID, creator, nil, []byte("{}"), "reflect contract 2", reflectStart)
+	reflectAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, reflectID, creator, nil, []byte("{}"), reflectStart)
 	require.NoError(t, err)
 	require.NotEmpty(t, reflectAddr)
 
@@ -332,7 +332,7 @@ func TestWasmRawQueryWithNil(t *testing.T) {
 
 	// creator instantiates a contract and gives it tokens
 	reflectStart := sdk.NewCoins(sdk.NewInt64Coin("denom", 40000))
-	reflectAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, reflectID, creator, nil, []byte("{}"), "reflect contract 2", reflectStart)
+	reflectAddr, _, err := keepers.ContractKeeper.Instantiate(ctx, reflectID, creator, nil, []byte("{}"), reflectStart)
 	require.NoError(t, err)
 	require.NotEmpty(t, reflectAddr)
 
@@ -370,7 +370,7 @@ func TestQueryDenomsIntegration(t *testing.T) {
 	codeID, _, err := ck.Create(ctx, creator, testdata.CyberpunkContractWasm(), nil)
 	require.NoError(t, err)
 
-	contractAddr, _, err := ck.Instantiate(ctx, codeID, creator, nil, []byte("{}"), "cyberpunk contract", nil)
+	contractAddr, _, err := ck.Instantiate(ctx, codeID, creator, nil, []byte("{}"), nil)
 	require.NoError(t, err)
 
 	var (

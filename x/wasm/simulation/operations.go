@@ -408,9 +408,9 @@ func SimulateMsgInstantiateContract(
 			Sender: simAccount.Address.String(),
 			Admin:  adminAccount.Address.String(),
 			CodeID: codeID,
-			Label:  simtypes.RandStringOfLength(r, 10),
-			Msg:    []byte(`{}`),
-			Funds:  deposit,
+			// Label:  simtypes.RandStringOfLength(r, 10),
+			Msg:   []byte(`{}`),
+			Funds: deposit,
 		}
 		txCtx := BuildOperationInput(r, app, ctx, &msg, simAccount, ak, bk, deposit)
 		return simulation.GenAndDeliverTxWithRandFees(txCtx)
