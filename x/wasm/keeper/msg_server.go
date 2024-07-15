@@ -57,6 +57,9 @@ func (m msgServer) InstantiateContract(goCtx context.Context, msg *types.MsgInst
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "sender")
 	}
+	if len(senderAddr) != types.ContractAddrLen {
+		ctx = ctx.WithValue(types.TxOrigin, senderAddr)
+	}
 	var adminAddr sdk.AccAddress
 	if msg.Admin != "" {
 		if adminAddr, err = sdk.AccAddressFromBech32(msg.Admin); err != nil {
@@ -87,6 +90,9 @@ func (m msgServer) InstantiateContract2(goCtx context.Context, msg *types.MsgIns
 	senderAddr, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "sender")
+	}
+	if len(senderAddr) != types.ContractAddrLen {
+		ctx = ctx.WithValue(types.TxOrigin, senderAddr)
 	}
 	var adminAddr sdk.AccAddress
 	if msg.Admin != "" {
@@ -119,6 +125,9 @@ func (m msgServer) ExecuteContract(goCtx context.Context, msg *types.MsgExecuteC
 	senderAddr, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, errorsmod.Wrap(err, "sender")
+	}
+	if len(senderAddr) != types.ContractAddrLen {
+		ctx = ctx.WithValue(types.TxOrigin, senderAddr)
 	}
 	contractAddr, err := sdk.AccAddressFromBech32(msg.Contract)
 	if err != nil {

@@ -20,6 +20,9 @@ const (
 
 	// RouterKey is the msg router key for the wasm module
 	RouterKey = ModuleName
+
+	// This is terra classic's custom context key for handle tax2gas
+	TxOrigin = "tx_origin"
 )
 
 var (
