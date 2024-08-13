@@ -15,10 +15,10 @@ RUN apk add git
 WORKDIR /code
 COPY . /code/
 # See https://github.com/CosmWasm/wasmvm/releases
-ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.5.3/libwasmvm_muslc.aarch64.a /lib/libwasmvm_muslc.aarch64.a
-ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.5.3/libwasmvm_muslc.x86_64.a /lib/libwasmvm_muslc.x86_64.a
-RUN sha256sum /lib/libwasmvm_muslc.aarch64.a | grep 0aaa6e39e9f57305a4f8b74d9a0f87d7872ee2c5f2055770c7993e522761967f
-RUN sha256sum /lib/libwasmvm_muslc.x86_64.a | grep 34b8941acf0b695d286b6644b07e2d2f7318787cc8bd28db363cb34b62ff11dc
+ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.5.4/libwasmvm_muslc.aarch64.a /lib/libwasmvm_muslc.aarch64.a
+ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.5.4/libwasmvm_muslc.x86_64.a /lib/libwasmvm_muslc.x86_64.a
+RUN sha256sum /lib/libwasmvm_muslc.aarch64.a | grep 1260584dde7db6251c2757b557ddd51884311ebc261c1be6c15afeacfc81ca77
+RUN sha256sum /lib/libwasmvm_muslc.x86_64.a | grep 9cf99a63637f80619d4baa6129ce54d64d2ff980ca00f08d84b3c74ca1238bcc
 
 # Copy the library you want to the final location that will be found by the linker flag `-lwasmvm_muslc`
 RUN cp /lib/libwasmvm_muslc.${arch}.a /lib/libwasmvm_muslc.a
