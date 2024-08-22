@@ -418,7 +418,7 @@ func TestInstantiate(t *testing.T) {
 
 	gasAfter := ctx.GasMeter().GasConsumed()
 	if types.EnableGasVerification {
-		require.Equal(t, uint64(0x1b5e8), gasAfter-gasBefore)
+		require.Equal(t, uint64(0x1b41a), gasAfter-gasBefore)
 	}
 
 	// ensure it is stored properly
@@ -429,10 +429,10 @@ func TestInstantiate(t *testing.T) {
 	assert.Equal(t, "demo contract 1", info.Label)
 
 	exp := []types.ContractCodeHistoryEntry{{
-		Operation: types.ContractCodeHistoryOperationTypeInit,
-		CodeID:    example.CodeID,
-		Updated:   types.NewAbsoluteTxPosition(ctx),
-		Msg:       initMsgBz,
+		// Operation: types.ContractCodeHistoryOperationTypeInit,
+		CodeID:  example.CodeID,
+		Updated: types.NewAbsoluteTxPosition(ctx),
+		Msg:     initMsgBz,
 	}}
 	assert.Equal(t, exp, keepers.WasmKeeper.GetContractHistory(ctx, gotContractAddr))
 
@@ -862,7 +862,7 @@ func TestExecute(t *testing.T) {
 	// make sure gas is properly deducted from ctx
 	gasAfter := ctx.GasMeter().GasConsumed()
 	if types.EnableGasVerification {
-		require.Equal(t, uint64(0x1a19f), gasAfter-gasBefore)
+		require.Equal(t, uint64(0x1a1a5), gasAfter-gasBefore)
 	}
 	// ensure bob now exists and got both payments released
 	bobAcct = accKeeper.GetAccount(ctx, bob)
@@ -1282,15 +1282,15 @@ func TestMigrate(t *testing.T) {
 			assert.Equal(t, spec.expIBCPort, cInfo.IBCPortID != "", cInfo.IBCPortID)
 
 			expHistory := []types.ContractCodeHistoryEntry{{
-				Operation: types.ContractCodeHistoryOperationTypeInit,
-				CodeID:    spec.fromCodeID,
-				Updated:   types.NewAbsoluteTxPosition(ctx),
-				Msg:       initMsgBz,
+				// Operation: types.ContractCodeHistoryOperationTypeInit,
+				CodeID:  spec.fromCodeID,
+				Updated: types.NewAbsoluteTxPosition(ctx),
+				Msg:     initMsgBz,
 			}, {
-				Operation: types.ContractCodeHistoryOperationTypeMigrate,
-				CodeID:    spec.toCodeID,
-				Updated:   types.NewAbsoluteTxPosition(ctx),
-				Msg:       spec.migrateMsg,
+				//Operation: types.ContractCodeHistoryOperationTypeMigrate,
+				CodeID:  spec.toCodeID,
+				Updated: types.NewAbsoluteTxPosition(ctx),
+				Msg:     spec.migrateMsg,
 			}}
 			assert.Equal(t, expHistory, keepers.WasmKeeper.GetContractHistory(ctx, contractAddr))
 

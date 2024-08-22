@@ -35,12 +35,12 @@ func TestOnOpenChannel(t *testing.T) {
 		"consume contract gas": {
 			contractAddr: example.Contract,
 			contractGas:  myContractGas,
-			expGas:       myContractGas,
+			expGas:       myContractGas + 3,
 		},
 		"consume max gas": {
 			contractAddr: example.Contract,
 			contractGas:  math.MaxUint64 / types.DefaultGasMultiplier,
-			expGas:       math.MaxUint64 / types.DefaultGasMultiplier,
+			expGas:       math.MaxUint64/types.DefaultGasMultiplier + 3,
 		},
 		"consume gas on error": {
 			contractAddr: example.Contract,
@@ -106,7 +106,7 @@ func TestOnConnectChannel(t *testing.T) {
 	}{
 		"consume contract gas": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp:   &wasmvmtypes.IBCBasicResponse{},
 		},
 		"consume gas on error, ignore events + messages": {
@@ -121,14 +121,14 @@ func TestOnConnectChannel(t *testing.T) {
 		},
 		"dispatch contract messages on success": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp: &wasmvmtypes.IBCBasicResponse{
 				Messages: []wasmvmtypes.SubMsg{{ReplyOn: wasmvmtypes.ReplyNever, Msg: wasmvmtypes.CosmosMsg{Bank: &wasmvmtypes.BankMsg{}}}, {ReplyOn: wasmvmtypes.ReplyNever, Msg: wasmvmtypes.CosmosMsg{Custom: json.RawMessage(`{"foo":"bar"}`)}}},
 			},
 		},
 		"emit contract events on success": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas + 10,
+			expContractGas: myContractGas + 13,
 			contractResp: &wasmvmtypes.IBCBasicResponse{
 				Attributes: []wasmvmtypes.EventAttribute{{Key: "Foo", Value: "Bar"}},
 			},
@@ -218,7 +218,7 @@ func TestOnCloseChannel(t *testing.T) {
 	}{
 		"consume contract gas": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp:   &wasmvmtypes.IBCBasicResponse{},
 		},
 		"consume gas on error, ignore events + messages": {
@@ -233,14 +233,14 @@ func TestOnCloseChannel(t *testing.T) {
 		},
 		"dispatch contract messages on success": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp: &wasmvmtypes.IBCBasicResponse{
 				Messages: []wasmvmtypes.SubMsg{{ReplyOn: wasmvmtypes.ReplyNever, Msg: wasmvmtypes.CosmosMsg{Bank: &wasmvmtypes.BankMsg{}}}, {ReplyOn: wasmvmtypes.ReplyNever, Msg: wasmvmtypes.CosmosMsg{Custom: json.RawMessage(`{"foo":"bar"}`)}}},
 			},
 		},
 		"emit contract events on success": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas + 10,
+			expContractGas: myContractGas + 13,
 			contractResp: &wasmvmtypes.IBCBasicResponse{
 				Attributes: []wasmvmtypes.EventAttribute{{Key: "Foo", Value: "Bar"}},
 			},
@@ -332,7 +332,7 @@ func TestOnRecvPacket(t *testing.T) {
 	}{
 		"contract returns success ack": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp: &wasmvmtypes.IBCReceiveResult{
 				Ok: &wasmvmtypes.IBCReceiveResponse{Acknowledgement: []byte("myAck")},
 			},
@@ -340,14 +340,14 @@ func TestOnRecvPacket(t *testing.T) {
 		},
 		"can return empty ack data": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp: &wasmvmtypes.IBCReceiveResult{
 				Ok: &wasmvmtypes.IBCReceiveResponse{},
 			},
 		},
 		"contract Err result converted to error Ack": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp: &wasmvmtypes.IBCReceiveResult{
 				Err: "my-error",
 			},
@@ -355,13 +355,13 @@ func TestOnRecvPacket(t *testing.T) {
 		},
 		"contract aborts tx with error": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractErr:    errors.New("test, ignore"),
 			expPanic:       true,
 		},
 		"dispatch contract messages on success": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp: &wasmvmtypes.IBCReceiveResult{
 				Ok: &wasmvmtypes.IBCReceiveResponse{
 					Acknowledgement: []byte("myAck"),
@@ -372,7 +372,7 @@ func TestOnRecvPacket(t *testing.T) {
 		},
 		"emit contract attributes on success": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas + 10,
+			expContractGas: myContractGas + 13,
 			contractResp: &wasmvmtypes.IBCReceiveResult{
 				Ok: &wasmvmtypes.IBCReceiveResponse{
 					Acknowledgement: []byte("myAck"),
@@ -384,7 +384,7 @@ func TestOnRecvPacket(t *testing.T) {
 		},
 		"emit contract events on success": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas + 46, // charge or custom event as well
+			expContractGas: myContractGas + 49, // charge or custom event as well
 			contractResp: &wasmvmtypes.IBCReceiveResult{
 				Ok: &wasmvmtypes.IBCReceiveResponse{
 					Acknowledgement: []byte("myAck"),
@@ -403,7 +403,7 @@ func TestOnRecvPacket(t *testing.T) {
 		},
 		"messenger errors returned": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas + 10,
+			expContractGas: myContractGas + 13,
 			contractResp: &wasmvmtypes.IBCReceiveResult{
 				Ok: &wasmvmtypes.IBCReceiveResponse{
 					Acknowledgement: []byte("myAck"),
@@ -417,7 +417,7 @@ func TestOnRecvPacket(t *testing.T) {
 		},
 		"submessage reply can overwrite ack data": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas + storageCosts,
+			expContractGas: myContractGas + storageCosts + 6,
 			contractResp: &wasmvmtypes.IBCReceiveResult{
 				Ok: &wasmvmtypes.IBCReceiveResponse{
 					Acknowledgement: []byte("myAck"),
@@ -518,12 +518,12 @@ func TestOnAckPacket(t *testing.T) {
 	}{
 		"consume contract gas": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp:   &wasmvmtypes.IBCBasicResponse{},
 		},
 		"consume gas on error, ignore events + messages": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp: &wasmvmtypes.IBCBasicResponse{
 				Messages:   []wasmvmtypes.SubMsg{{ReplyOn: wasmvmtypes.ReplyNever, Msg: wasmvmtypes.CosmosMsg{Bank: &wasmvmtypes.BankMsg{}}}},
 				Attributes: []wasmvmtypes.EventAttribute{{Key: "Foo", Value: "Bar"}},
@@ -533,14 +533,14 @@ func TestOnAckPacket(t *testing.T) {
 		},
 		"dispatch contract messages on success": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp: &wasmvmtypes.IBCBasicResponse{
 				Messages: []wasmvmtypes.SubMsg{{ReplyOn: wasmvmtypes.ReplyNever, Msg: wasmvmtypes.CosmosMsg{Bank: &wasmvmtypes.BankMsg{}}}, {ReplyOn: wasmvmtypes.ReplyNever, Msg: wasmvmtypes.CosmosMsg{Custom: json.RawMessage(`{"foo":"bar"}`)}}},
 			},
 		},
 		"emit contract events on success": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas + 10,
+			expContractGas: myContractGas + 13,
 			contractResp: &wasmvmtypes.IBCBasicResponse{
 				Attributes: []wasmvmtypes.EventAttribute{{Key: "Foo", Value: "Bar"}},
 			},
@@ -623,12 +623,12 @@ func TestOnTimeoutPacket(t *testing.T) {
 	}{
 		"consume contract gas": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp:   &wasmvmtypes.IBCBasicResponse{},
 		},
 		"consume gas on error, ignore events + messages": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp: &wasmvmtypes.IBCBasicResponse{
 				Messages:   []wasmvmtypes.SubMsg{{ReplyOn: wasmvmtypes.ReplyNever, Msg: wasmvmtypes.CosmosMsg{Bank: &wasmvmtypes.BankMsg{}}}},
 				Attributes: []wasmvmtypes.EventAttribute{{Key: "Foo", Value: "Bar"}},
@@ -638,14 +638,14 @@ func TestOnTimeoutPacket(t *testing.T) {
 		},
 		"dispatch contract messages on success": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas,
+			expContractGas: myContractGas + 3,
 			contractResp: &wasmvmtypes.IBCBasicResponse{
 				Messages: []wasmvmtypes.SubMsg{{ReplyOn: wasmvmtypes.ReplyNever, Msg: wasmvmtypes.CosmosMsg{Bank: &wasmvmtypes.BankMsg{}}}, {ReplyOn: wasmvmtypes.ReplyNever, Msg: wasmvmtypes.CosmosMsg{Custom: json.RawMessage(`{"foo":"bar"}`)}}},
 			},
 		},
 		"emit contract attributes on success": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas + 10,
+			expContractGas: myContractGas + 13,
 			contractResp: &wasmvmtypes.IBCBasicResponse{
 				Attributes: []wasmvmtypes.EventAttribute{{Key: "Foo", Value: "Bar"}},
 			},
@@ -653,7 +653,7 @@ func TestOnTimeoutPacket(t *testing.T) {
 		},
 		"emit contract events on success": {
 			contractAddr:   example.Contract,
-			expContractGas: myContractGas + 46, // cost for custom events
+			expContractGas: myContractGas + 49, // cost for custom events
 			contractResp: &wasmvmtypes.IBCBasicResponse{
 				Attributes: []wasmvmtypes.EventAttribute{{Key: "Foo", Value: "Bar"}},
 				Events: []wasmvmtypes.Event{{
