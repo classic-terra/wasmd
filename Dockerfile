@@ -15,8 +15,8 @@ RUN apk add git
 WORKDIR /code
 COPY . /code/
 # See https://github.com/CosmWasm/wasmvm/releases
-ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.5.4/libwasmvm_muslc.aarch64.a /lib/libwasmvm_muslc.aarch64.a
-ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.5.4/libwasmvm_muslc.x86_64.a /lib/libwasmvm_muslc.x86_64.a
+ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.5.5/libwasmvm_muslc.aarch64.a /lib/libwasmvm_muslc.aarch64.a
+ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.5.5/libwasmvm_muslc.x86_64.a /lib/libwasmvm_muslc.x86_64.a
 RUN sha256sum /lib/libwasmvm_muslc.aarch64.a | grep 1260584dde7db6251c2757b557ddd51884311ebc261c1be6c15afeacfc81ca77
 RUN sha256sum /lib/libwasmvm_muslc.x86_64.a | grep 9cf99a63637f80619d4baa6129ce54d64d2ff980ca00f08d84b3c74ca1238bcc
 
