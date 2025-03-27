@@ -538,6 +538,9 @@ func NewWasmApp(
 		scopedICAHostKeeper,
 		app.MsgServiceRouter(),
 	)
+
+	app.ICAHostKeeper.WithQueryRouter(bApp.GRPCQueryRouter())
+
 	app.ICAControllerKeeper = icacontrollerkeeper.NewKeeper(
 		appCodec,
 		keys[icacontrollertypes.StoreKey],
